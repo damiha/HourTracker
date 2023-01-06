@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <title>Hour Tracker</title>
+</head>
+<body>
+    <header>
+
+        <h1>Hour Tracker</h1>
+
+    </header>
+
+    <main>
+        
+        <div>
+            <form action="http://127.0.0.1:5000/add_category", method="post">
+                <button type="submit">+</button>
+                <input name="name" type="text" placeholder="Name of your category">
+            </form>
+        </div>
+
+        <div>
+            <ul>
+            {% for category in categories %}
+            <li>
+                <div>
+                    <p>{{ category.name }}</p>
+                    <form action="http://127.0.0.1:5000/add_hour" method="post">
+                        <button name="name" value="{{ category.name }}" type="submit">+</button>
+                    </form>
+                    <ul>
+                        {% for hour in category.hours %}
+                        <li>
+                            <input type="checkbox">
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </main>
+    
+    <footer></footer>
+</body>
+</html>
