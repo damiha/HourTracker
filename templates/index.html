@@ -17,26 +17,28 @@
 
     <main>
         
-        <div>
+        <div id="add_category_div">
             <form action="http://127.0.0.1:5000/add_category", method="post">
                 <button type="submit">+</button>
                 <input name="name" type="text" placeholder="Name of your category">
             </form>
         </div>
 
-        <div>
-            <ul>
+        <div id="categories_div">
+            <ul id="category_list">
             {% for category in categories %}
             <li>
-                <div>
-                    <p>{{ category.name }}</p>
-                    <form action="http://127.0.0.1:5000/add_hour" method="post">
-                        <button name="name" value="{{ category.name }}" type="submit">+</button>
-                    </form>
-                    <ul>
+                <div id="category_div">
+                    <h2>{{ category.name }}</h2>
+                    <ul id="hour_list">
+                        <li>
+                            <form action="http://127.0.0.1:5000/add_hour" method="post">
+                                <button name="name" value="{{ category.name }}" type="submit" id="hour_button">+</button>
+                            </form>
+                        </li>
                         {% for hour in category.hours %}
                         <li>
-                            <input type="checkbox">
+                            <input type="checkbox" id="hour_checkbox">
                         </li>
                         {% endfor %}
                     </ul>
@@ -47,6 +49,8 @@
         </div>
     </main>
     
-    <footer></footer>
+    <footer>
+        <button>Go To Statistics</button>
+    </footer>
 </body>
 </html>
