@@ -18,7 +18,7 @@
     <main>
         
         <div id="add_category_div">
-            <form action="http://127.0.0.1:5000/add_category", method="post">
+            <form action="{{ url_for('add_category') }}", method="post">
                 <button type="submit">+</button>
                 <input name="name" type="text" placeholder="Name of your category">
             </form>
@@ -32,7 +32,7 @@
                     <h2>{{ category.name }}</h2>
                     <ul id="hour_list">
                         <li>
-                            <form action="http://127.0.0.1:5000/add_hour" method="post">
+                            <form action="{{ url_for('add_hour') }}" method="post">
                                 <button name="name" value="{{ category.name }}" type="submit" id="hour_button">+</button>
                             </form>
                         </li>
