@@ -141,4 +141,7 @@ def get_from_db():
     # only if available
     if records.count_documents(date_query()) == 1:
         x = records.find(date_query())[0]
+
+        # global keyword needed to write to a variable outside a function
+        global categories
         categories = x["categories"]
