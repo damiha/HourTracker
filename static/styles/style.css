@@ -40,6 +40,14 @@ ul {
 #add_category_div {
     margin-top: 20px;
     /*background-color: grey;*/
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+#add_category_div form {
+    display: flex;
+    flex-direction: row;
 }
 
 #add_category_div button {
@@ -49,6 +57,16 @@ ul {
 
 #add_category_div input {
     height: 50px;
+}
+
+#category_error_div {
+    background-color: lightsalmon;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    border-radius: 4px;
 }
 
 #categories_div {
@@ -90,8 +108,12 @@ footer button {
     border: 1px solid black;
     margin: auto;
     width: 50%;
+}
+
+#login_div form {
     display: flex;
     flex-direction: column;
+    gap: 20px;
 }
 
 #login_row {
@@ -100,7 +122,15 @@ footer button {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 20px;
+}
+
+#login_error {
+    background-color: lightsalmon;
+    border-radius: 4px;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #login_row h2{

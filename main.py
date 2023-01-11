@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import hashlib
 import pymongo
 from datetime import date
@@ -37,9 +37,19 @@ def add_category():
 
     data = request.form
     
-    if data["name"] != "":
+    # make sure that the same category doesnt exist twice for the same day
+    if data["name"] == "":
+        flash("can't add a nameless category")
+        return redirect("/home")
+
+    elif does_category_already_exist(data["name"]):
+        flash("category name already exists (ignoring casing)")
+        return redirect("/home")
+    
+    else:
+        # add lower case version to data base (canonical form)
         categories.append({
-            "name": data["name"],
+            "name": data["name"].lower(),
             "hours": []
         })
     
@@ -74,7 +84,9 @@ def seek_authorization():
             session["logged_in"] = True
             return redirect("/")
     
-    return redirect("/login")
+    else:
+        flash("username or password incorrect")
+        return redirect("/login")
 
 # for authentification
 def credentials_valid(username, password):
@@ -145,3 +157,11 @@ def get_from_db():
         # global keyword needed to write to a variable outside a function
         global categories
         categories = x["categories"]
+
+def does_category_already_exist(name):
+
+    for category in categories:
+        if category["name"].lower() == name.lower():
+            return True
+    return False
+    

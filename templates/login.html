@@ -19,6 +19,18 @@
         
         <div id="login_div">
             <form action="{{ url_for('seek_authorization') }}", method="post">
+
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <div id="login_row">
+                            <div id="login_error">
+                                <h3>{{ message }}</h3>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% endwith %}
                 <div id="login_row">
                     <h2>user name:</h2>
                     <input name="username" type="text">
