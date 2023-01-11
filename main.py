@@ -164,4 +164,7 @@ def does_category_already_exist(name):
         if category["name"].lower() == name.lower():
             return True
     return False
-    
+
+@app.route("/stats")
+def stats():
+    return render_template("stats.html", categories=categories)
