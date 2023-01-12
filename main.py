@@ -3,6 +3,8 @@ import hashlib
 import pymongo
 from datetime import date
 
+from create_stats import create_hours_today
+
 app = Flask(__name__)
 
 # connect to database
@@ -114,6 +116,9 @@ def date_query():
 @app.route("/set_hour", methods=["POST"])
 def set_hour():
 
+    if not logged_in():
+        redirect("/login")
+
     data = request.form
 
     # agreement that only one key gets sent with post request
@@ -133,6 +138,10 @@ def set_hour():
     return redirect("/home")
 
 def write_to_db():
+
+    # only write if there is something to write
+    if len(categories) == 0:
+        return
 
     # if no entry for today, insert
     if records.count_documents(date_query()) == 0:
@@ -167,4 +176,8 @@ def does_category_already_exist(name):
 
 @app.route("/stats")
 def stats():
+
+    # generate stats
+    create_hours_today(categories)
+
     return render_template("stats.html", categories=categories)

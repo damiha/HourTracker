@@ -17,8 +17,25 @@
 
     <main>
         
-        <h1> Nothing to see here!</h1>
-        
+        <div id="stats_div">
+            
+            <div id="img_nav_div">
+                <button>&lt;</button>
+            </div>
+
+            <img src="{{ url_for('static', filename='stats_images/hours_worked_today.png') }}" alt="Stats">
+
+            <div id="img_nav_div">
+                <button>&gt;</button>
+            </div>
+        </div>
+
     </main>
+
+    <footer>
+        <form action="{{ url_for('home') }}">
+            <button type="submit">Back to menu</button>
+        </form>
+    </footer>
 </body>
 </html>

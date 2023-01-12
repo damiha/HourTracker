@@ -53,7 +53,10 @@
                                 {% if category.hours[i] == 0 %}
                                 <input name="{{ category.name }}:{{ i }}" type="checkbox" id="hour_checkbox" onchange="document.getElementById('{{ category.name }} : {{ i }}').submit()">
                                 {% else %}
-                                <input name="{{ category.name }}:{{ i }}" type="checkbox" id="hour_checkbox" checked=checked onchange="document.getElementById('{{ category.name }} : {{ i }}').submit()">
+
+                                <input name="{{ category.name }}:{{ i }}" type="checkbox" checked=checked id="hour_checkbox" onchange="document.getElementById('{{ category.name }} : {{ i }}').submit()">
+
+                                <input type="hidden" name="{{ category.name }}:{{ i }}" value="off" />
                                 {% endif %}
                             </form>
                         </li>
