@@ -139,10 +139,6 @@ def set_hour():
 
 def write_to_db():
 
-    # only write if there is something to write
-    if len(categories) == 0:
-        return
-
     # if no entry for today, insert
     if records.count_documents(date_query()) == 0:
         records.insert_one({
@@ -150,7 +146,12 @@ def write_to_db():
             "categories": categories
         })
         print("inserted")
-    else:
+
+    # update means entry exists
+    # categories not empty and no empty but no delete operation would mean faulty operation
+    # hence for a valid update it must hold len(categories) > 0
+    elif len(categories) > 0:
+
         records.update_one(date_query(), {
             "$set": {"categories": categories}
         })
@@ -167,6 +168,12 @@ def get_from_db():
         global categories
         categories = x["categories"]
 
+    # there is no entry for the day yet but we logged in, so create on
+    elif records.count_documents(date_query()) == 0:
+        # new day so empty categories
+        categories = []
+        write_to_db()
+
 def does_category_already_exist(name):
 
     for category in categories:
@@ -178,6 +185,6 @@ def does_category_already_exist(name):
 def stats():
 
     # generate stats
-    create_hours_today(categories)
+    create_hours_today(categories, title="Hours worked today")
 
     return render_template("stats.html", categories=categories)

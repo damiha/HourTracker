@@ -7,10 +7,18 @@ plt.rcParams["figure.figsize"] = (8,6)
 
 save_destination = "static/stats_images"
 
-def create_hours_today(categories):
+def save_empty_image_at(filename, title):
+    plt.clf()
+    plt.title(title)
+    plt.text(0.25, 0.5, "No stats available", fontsize=25)
+    plt.savefig(f"{save_destination}/{filename}")
+
+def create_hours_today(categories, title):
 
     # can't create stats when no categories were added that day
+    # old stats images have to be deleted since they are out of date
     if len(categories) == 0:
+        save_empty_image_at("hours_worked_today.png", title)
         return
     
     category_names = list(map(lambda c: c["name"], categories))
@@ -28,7 +36,7 @@ def create_hours_today(categories):
     # delete old version of file
     #os.remove(f"{save_destination}/hours_worked_today.png")
     plt.clf()
-    plt.title("Hours worked today")
+    plt.title(title)
     plt.bar(x_pos, hours_cumulated, align="center", color="steelblue")
     plt.xticks(x_pos, category_names)
     plt.yticks(np.linspace(0, ymax, ymax + 1))
