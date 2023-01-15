@@ -8,6 +8,8 @@ from create_stats import create_hours_today, create_hours_last_week, create_work
 
 app = Flask(__name__)
 
+APP_URL = "hour_tracker"
+
 # connect to database
 mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
 database = mongo_client["hour_tracker"]
@@ -21,36 +23,36 @@ with open("secret_key.txt", "r") as f:
 categories = []
 recent_category_names = ["data mining", "algorithm design", "programming", "optimization"]
 
-@app.route("/login")
+@app.route(f"/{APP_URL}/login")
 def login():
     return render_template("login.html")
 
-@app.route("/")
-@app.route("/home")
+@app.route(f"/{APP_URL}/")
+@app.route(f"/{APP_URL}/home")
 def home():
     if not logged_in():
-        return redirect("/login")
+        return redirect(f"/{APP_URL}/login")
     
     get_from_db()
     get_recent_categories_from_db()
     return render_template("index.html", categories=categories, recent_category_names=recent_category_names)
 
-@app.route("/add_category", methods=["POST"])
+@app.route(f"/{APP_URL}/add_category", methods=["POST"])
 def add_category():
 
     if not logged_in():
-        redirect("/login")
+        redirect(f"/{APP_URL}/login")
 
     data = request.form
     
     # make sure that the same category doesnt exist twice for the same day
     if data["name"] == "":
         flash("can't add a nameless category")
-        return redirect("/home")
+        return redirect(f"/{APP_URL}/home")
 
     elif does_category_already_exist(data["name"]):
         flash("category name already exists (ignoring casing)")
-        return redirect("/home")
+        return redirect(f"/{APP_URL}/home")
     
     else:
         # add lower case version to data base (canonical form)
@@ -63,13 +65,13 @@ def add_category():
         write_category_info(category_added={"name": data["name"].lower()})
     
     write_to_db()
-    return redirect("/home")
+    return redirect(f"/{APP_URL}/home")
 
 @app.route("/add_hour", methods=["POST"])
 def add_hour():
 
     if not logged_in():
-        redirect("/login")
+        redirect(f"/{APP_URL}/login")
 
     category_name = request.form["name"]
     
@@ -78,10 +80,10 @@ def add_hour():
             category["hours"].append(0)
 
     write_to_db()
-    return redirect("/")
+    return redirect(f"/{APP_URL}/")
 
 
-@app.route("/seek_authorization", methods=["POST"])
+@app.route(f"/{APP_URL}/seek_authorization", methods=["POST"])
 def seek_authorization():
 
     data = request.form
@@ -91,11 +93,11 @@ def seek_authorization():
         credentials_valid(data["username"], data["password"]):
 
             session["logged_in"] = True
-            return redirect("/")
+            return redirect(f"/{APP_URL}/")
     
     else:
         flash("username or password incorrect")
-        return redirect("/login")
+        return redirect(f"/{APP_URL}/login")
 
 # for authentification
 def credentials_valid(username, password):
@@ -120,11 +122,11 @@ def date_query():
     query = {"date": today}
     return query
 
-@app.route("/set_hour", methods=["POST"])
+@app.route(f"/{APP_URL}/set_hour", methods=["POST"])
 def set_hour():
 
     if not logged_in():
-        redirect("/login")
+        redirect(f"/{APP_URL}/login")
 
     data = request.form
 
@@ -142,7 +144,7 @@ def set_hour():
             category["hours"][int(hour_index)] = value
 
     write_to_db()
-    return redirect("/home")
+    return redirect(f"/{APP_URL}/home")
 
 def write_to_db():
 
@@ -188,7 +190,7 @@ def does_category_already_exist(name):
             return True
     return False
 
-@app.route("/stats")
+@app.route(f"/{APP_URL}/stats")
 def stats():
 
     # generate stats
