@@ -20,13 +20,13 @@
         <div id="stats_div">
             
             <div id="img_nav_div">
-                <button>&lt;</button>
+                <button onclick="leftClicked();">&lt;</button>
             </div>
 
-            <img src="{{ url_for('static', filename='stats_images/hours_worked_today.png') }}" alt="Stats">
+            <img src="{{ url_for('static', filename='stats_images/hours_worked_today.png') }}" alt="Stats" id="image_display">
 
             <div id="img_nav_div">
-                <button>&gt;</button>
+                <button onclick="rightClicked();">&gt;</button>
             </div>
         </div>
 
@@ -37,5 +37,36 @@
             <button type="submit">Back to menu</button>
         </form>
     </footer>
+
+    <script type="text/javascript">
+
+        var indexToImage = 0;
+        var imageDisplay = document.getElementById("image_display");
+        var basePath = "{{ url_for('static', filename='stats_images') }}";
+
+        map = {
+            0: "hours_worked_today.png",
+            1: "hours_last_week.png",
+            2: "work_distribution_last_week.png"
+        }
+
+        mapSize = Object.keys(map).length;
+
+        function updateImage(){
+            var fileName = map[indexToImage];
+            imageDisplay.src = `${basePath}/${fileName}`;
+        }
+
+        function leftClicked(){
+            indexToImage = (indexToImage - 1 + mapSize) % mapSize;
+            updateImage();
+        }
+
+        function rightClicked(){
+            indexToImage = (indexToImage + 1) % mapSize;
+            updateImage();
+        }
+
+    </script>
 </body>
 </html>

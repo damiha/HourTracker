@@ -3,7 +3,7 @@ import hashlib
 import pymongo
 from datetime import date
 
-from create_stats import create_hours_today
+from create_stats import create_hours_today, create_hours_last_week, create_work_distribution_last_week
 
 app = Flask(__name__)
 
@@ -186,5 +186,7 @@ def stats():
 
     # generate stats
     create_hours_today(categories, title="Hours worked today")
+    create_hours_last_week(records, title="Hours last week")
+    create_work_distribution_last_week(records, title="Work distribution last week")
 
     return render_template("stats.html", categories=categories)
