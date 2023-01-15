@@ -69,10 +69,6 @@ ul {
     border-radius: 4px;
 }
 
-#categories_div {
-    margin-top: 20px;
-}
-
 #category_list {
     display: flex;
     flex-direction: column;
@@ -158,4 +154,12 @@ footer button {
 #img_nav_div button {
     height: 50px;
     width: 50px;
+}
+
+#recent_categories_div {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    align-items: center;
 }

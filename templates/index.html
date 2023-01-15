@@ -35,6 +35,17 @@
 
         </div>
 
+        <div id="recent_categories_div">
+            <h4>Recent categories:</h4>
+
+            {% for category_name in recent_category_names %}
+                <form action="{{ url_for('add_category') }}" method="post">
+                    <button id="recent_category_button" type="submit">{{ category_name }}</button>
+                    <input type="hidden" name="name" value="{{ category_name }}">
+                </form>
+            {% endfor %}
+        </div>
+
         <div id="categories_div">
             <ul id="category_list">
             {% for category in categories %}

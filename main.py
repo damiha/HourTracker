@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 import hashlib
 import pymongo
 from datetime import date
+import time
 
 from create_stats import create_hours_today, create_hours_last_week, create_work_distribution_last_week
 
@@ -11,12 +12,14 @@ app = Flask(__name__)
 mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
 database = mongo_client["hour_tracker"]
 records = database["records"]
+category_info = database["category_info"]
 
 with open("secret_key.txt", "r") as f:
     secret_key = f.read().replace("\n", "")
     app.secret_key = secret_key
 
 categories = []
+recent_category_names = ["data mining", "algorithm design", "programming", "optimization"]
 
 @app.route("/login")
 def login():
@@ -29,7 +32,8 @@ def home():
         return redirect("/login")
     
     get_from_db()
-    return render_template("index.html", categories=categories)
+    get_recent_categories_from_db()
+    return render_template("index.html", categories=categories, recent_category_names=recent_category_names)
 
 @app.route("/add_category", methods=["POST"])
 def add_category():
@@ -54,6 +58,9 @@ def add_category():
             "name": data["name"].lower(),
             "hours": []
         })
+
+        # add or update category info
+        write_category_info(category_added={"name": data["name"].lower()})
     
     write_to_db()
     return redirect("/home")
@@ -190,3 +197,31 @@ def stats():
     create_work_distribution_last_week(records, title="Work distribution last week")
 
     return render_template("stats.html", categories=categories)
+
+def write_category_info(category_added):
+
+    date_string = date.today().strftime("%d/%m/%Y")
+
+    if category_info.count_documents({"name": category_added["name"]}) == 0:
+        category_info.insert_one({
+            "name": category_added["name"],
+            "last_used": date_string
+        })
+
+    else:
+        category_info.update_one({"name": category_added["name"]}, {
+            "$set": {"last_used": date_string}
+        })
+
+def get_recent_categories_from_db():
+
+    # there exists at least one category
+    if category_info.count_documents({}) != 0:
+
+        all_category_info = category_info.find({})
+
+        # sort by date and pick 5 most recent results
+        sorted_category_info = list(sorted(all_category_info, key=lambda o: time.strptime(o["last_used"], "%d/%m/%Y"), reverse=True))[:5]
+
+        global recent_category_names
+        recent_category_names = list(map(lambda i : i["name"], sorted_category_info))
