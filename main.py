@@ -21,7 +21,7 @@ with open("secret_key.txt", "r") as f:
     app.secret_key = secret_key
 
 categories = []
-recent_category_names = ["data mining", "algorithm design", "programming", "optimization"]
+recent_category_names = []
 
 @app.route(f"/{APP_URL}/login")
 def login():
