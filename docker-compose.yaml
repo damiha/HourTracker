@@ -1,0 +1,8 @@
+version: "3.9"
+services:
+  website:
+    image: hour_tracker:basic
+    ports:
+      - 5000:5000
+    extra_hosts:
+      mongoservice: 172.17.0.1

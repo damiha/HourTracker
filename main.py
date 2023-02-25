@@ -11,7 +11,7 @@ app = Flask(__name__)
 APP_URL = "hour_tracker"
 
 # connect to database
-mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
+mongo_client = pymongo.MongoClient("mongodb://mongoservice:27017/")
 database = mongo_client["hour_tracker"]
 records = database["records"]
 category_info = database["category_info"]

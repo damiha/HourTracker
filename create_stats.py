@@ -110,6 +110,10 @@ def create_work_distribution_last_week(records, title):
     hours_per_category = hours_per_category.values()
     hours_in_total = sum(hours_per_category)
 
+    if hours_in_total == 0:
+        save_empty_image_at("work_distribution_last_week.png", title)
+        return
+
     plt.clf()
     plt.title(title)
     plt.pie(hours_per_category, labels=labels, autopct = lambda pct: f"{round(pct * hours_in_total / 100)}")
