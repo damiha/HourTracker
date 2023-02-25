@@ -29,8 +29,16 @@ A minimalistic web app I created using Flask. It helps me to track how much time
 1. run ``python3 sign_up_user.py``
 There you are asked to provide a username and a password (their hashes are stored on the server). Additionally, a secret session key is generated. Currently only one user is supported (plan on extending this in the future).
 
+### Run in command line
+
 2. run ``python3 start.py`` to start the server. You can access it under `your ip`/hour_tracker/login:5000.
 For the hour tracker to run all the time, check out the linux tool `screen` (especially the `detach from session` function)
 
 3. If something goes wrong, you can shut down the server using ``Ctrl+C``. Additionally, you can clear the entire database by executing `python3 clear_database.py`(although not recommended)
+
+### Run with docker
+
+2. run `docker compose up` (this pulls the most recent docker image from my docker hub repository)
+
+3. To shut down the server, simply run `docker compose down` or press `Ctrl+C` alternatively
 
