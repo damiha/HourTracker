@@ -1,8 +1,16 @@
 version: "3.9"
 services:
   website:
-    image: hour_tracker:basic
+    image: damiha/hour_tracker:basic
     ports:
       - 5000:5000
     extra_hosts:
       mongoservice: 172.17.0.1
+    volumes:
+      - type: bind
+        source: ./secret_key.txt
+        target: /app/secret_key.txt
+      - type: bind
+        source: ./users.txt
+        target: /app/users.txt
+      
